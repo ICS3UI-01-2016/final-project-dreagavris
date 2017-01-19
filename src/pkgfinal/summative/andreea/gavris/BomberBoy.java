@@ -16,8 +16,8 @@ import javax.swing.JFrame;
 public class BomberBoy extends JComponent implements KeyListener {
 
     // Height and Width of our game
-    static final int WIDTH = 585;
-    static final int HEIGHT = 505;
+    static final int WIDTH = 635;
+    static final int HEIGHT = 550;
     // sets the framerate and delay for our game
     // you just need to select an approproate framerate
     long desiredFPS = 60;
@@ -25,11 +25,12 @@ public class BomberBoy extends JComponent implements KeyListener {
     // game vairables 
     Color backgroundcolor = new Color(43, 23, 5);
     Color skincolor = new Color(244, 66, 66);
-    Rectangle boy = new Rectangle(550, 465, 30, 35);
+    Rectangle boy = new Rectangle(53, 469, 30, 35);
     Color blockscolor = new Color(196, 170, 137);
+    Rectangle bomb = new Rectangle(53, 600, 5, 10);
     Rectangle[] blocks = new Rectangle[30];
     Color cratescolor = new Color(94, 46, 26);
-    Rectangle[] crates = new Rectangle[40];
+    Rectangle[] crates = new Rectangle[55];
     boolean upkey = false;
     boolean downkey = false;
     boolean leftkey = false;
@@ -49,6 +50,7 @@ public class BomberBoy extends JComponent implements KeyListener {
         g.fillRect(0, 0, WIDTH, HEIGHT);
         g.setColor(skincolor);
         //Create the boy
+        g.fillRect(boy.x, boy.y, boy.width, boy.height);
         g.fillRect(boy.x, boy.y, boy.width, boy.height);
 
         // Set the color of the blocks
@@ -87,34 +89,36 @@ public class BomberBoy extends JComponent implements KeyListener {
 
         // Determine if the row is even or odd
         // This one increases by one only nad the a maxiumum of 12
-        for (int row = 1; row < 10; row = row + 1) {
-            for (int col = 1; col < 12; col = col + 1) {
+        for (int row = 0; row < 11; row = row + 2) {
+            for (int col = 1; col < 13; col = col + 1) {
                 int rand = (int) (Math.random() * 10 + 1);
-                if (rand < 3) {
-                    crates[crateCount] = new Rectangle(col * 42 + 42, row * 42 + 42, 42, 42);
-                    crateCount++;
-                    if (crateCount == 15) {
-                        break;
+                if (rand < 8) {
+                    if (crateCount < 50) {
+                        crates[crateCount] = new Rectangle(col * 42 + 42, row * 42 + 42, 42, 42);
+                        crateCount++;
+                        if (crateCount == 27) {
+                            break;
 
+                        }
                     }
                 }
-            }
-            if (crateCount == 15) {
-                break;
+                if (crateCount == 15) {
+                    break;
+
+                }
 
             }
-
         }
         // Determine if the row is even or odd
         // This one increases by two because it skipping and has the a maxiumum of 12
-        for (int row = 1; row < 10; row = row + 2) {
-            for (int col = 1; col < 12; col = col + 1) {
+        for (int row = 0; row < 11; row = row + 2) {
+            for (int col = 1; col < 13; col = col + 1) {
                 // 
                 int rand = (int) (Math.random() * 10 + 1);
-                if (rand < 3) {
+                if (rand < 8) {
                     crates[crateCount] = new Rectangle(col * 42 + 42, row * 42 + 42, 42, 42);
                     crateCount++;
-                    if (crateCount == 35) {
+                    if (crateCount == 50) {
                         break;
                     }
 
@@ -124,11 +128,11 @@ public class BomberBoy extends JComponent implements KeyListener {
             if (crateCount == 35) {
                 break;
             }
-           
-            if(crates[1].intersects(boy)){
+
+
             
-            
-            }
+
+
 
             // the main game loop section
             // game will end if you set done = false;
@@ -152,6 +156,51 @@ public class BomberBoy extends JComponent implements KeyListener {
                     boy.x = boy.x + 3;
                 }
 
+                
+                for (int i = 0; i < crateCount; i++) {
+                if (crates[i].intersects(boy)) {
+                    Rectangle crateCollusion = boy.intersection(crates[i]);
+                    if (boy.x > crates[i].x) {
+                        boy.x = boy.x - crateCollusion.width;
+                    }
+                    if (boy.x < crates[i].x) {
+                        boy.x = boy.x - crateCollusion.width;
+                    }
+                    if (boy.y > crates[i].y) {
+                        boy.y = boy.y - crateCollusion.width;
+                    }
+                    if (boy.y < crates[i].y) {
+                        boy.y = boy.y - crateCollusion.width;
+
+                    }
+                }
+            }
+
+            for (int e = 0; e < blockcount; e++) {
+      
+                if (blocks[e].intersects(boy)) {
+                    Rectangle blocksCollusion = boy.intersection(blocks[e]);
+                    if (boy.x > blocks[e].x) {
+                        //boy.x = boy.x - blocksCollusion.width;
+                        if( boy.width > boy.height){
+                            //
+                            
+                        }
+                    }
+                    if (boy.x < blocks[e].x) {
+                        boy.x = boy.x - blocksCollusion.width;
+                    }
+                    if (boy.y > blocks[e].y) {
+                        boy.y = boy.y - blocksCollusion.width;
+                    }
+                    if (boy.y < blocks[e].y) {
+                        boy.y = boy.y + blocksCollusion.width;
+
+                    }
+                }
+            }
+
+                
                 // GAME LOGIC ENDS HERE 
 
                 // update the drawing (calls paintComponent)

@@ -161,11 +161,11 @@ public class BomberBoy extends JComponent implements KeyListener {
                     if (crates[i].intersects(boy)) {
                         Rectangle crateCollusion = boy.intersection(crates[i]);
 
-                        //LEFT X
-                        if (boy.x > crates[i].x) {
+                        //Left Side of the crate 
+                        if (boy.x < crates[i].x) {
                             if (crateCollusion.width > crateCollusion.height) {
-                                boy.y = boy.y - crateCollusion.height;
-                                
+                                boy.x = boy.x - crateCollusion.height;
+
                             }
                             if (crateCollusion.width < crateCollusion.height) {
                                 boy.x = boy.x - crateCollusion.width;
@@ -173,27 +173,26 @@ public class BomberBoy extends JComponent implements KeyListener {
                             }
 
                         }
-
-                        //RIGHT X
-                        if (boy.x < crates[i].x) {
+                        //Right Side of the crate
+                        if (boy.x > crates[i].x) {
+                            if (crateCollusion.width > crateCollusion.height) {
+                                boy.x = boy.x + crateCollusion.height;
+                            }
                             if (crateCollusion.width < crateCollusion.height) {
-                                boy.y = boy.y + crateCollusion.height;
-                            }
-                           // if (crateCollusion.width > crateCollusion.height) {
                                 boy.x = boy.x + crateCollusion.width;
-                           // }
+                            }
+                            //-------------------------------------------------------------------------------------------------------------------                         
 
-//--------------------------------------------------------------------------------------------------------
-
-                        //TOP Y
                             if (boy.y > crates[i].y) {
-                                if (crateCollusion.width > crateCollusion.height)
-                                        boy.y = boy.y - crateCollusion.width;
+                                if (crateCollusion.width < crateCollusion.height) {
+                                    boy.y = boy.y - crateCollusion.width;
+                                }
                             }
-                        //BOTTOM Y   
+
                             if (boy.y < crates[i].y) {
-                                if( crateCollusion.width > crateCollusion.height)
-                                boy.x = boy.x + crateCollusion.width;
+                                if (crateCollusion.width < crateCollusion.height) {
+                                    boy.x = boy.x + crateCollusion.width;
+                                }
 
                             }
                         }
@@ -242,17 +241,13 @@ public class BomberBoy extends JComponent implements KeyListener {
                     };
                 }
             }
+
+
+            /**
+             * @param args the command line arguments
+             */
         }
-
-        /**
-         * @param args the command line arguments
-         */
-    
-
-    
-
-    
-
+    }
     public static void main(String[] args) {
         // creates a windows to show my game
         JFrame frame = new JFrame("My Game");

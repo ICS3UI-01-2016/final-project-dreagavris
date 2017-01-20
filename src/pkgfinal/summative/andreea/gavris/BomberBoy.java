@@ -130,7 +130,7 @@ public class BomberBoy extends JComponent implements KeyListener {
             }
 
 
-            
+
 
 
 
@@ -156,78 +156,103 @@ public class BomberBoy extends JComponent implements KeyListener {
                     boy.x = boy.x + 3;
                 }
 
-                
+
                 for (int i = 0; i < crateCount; i++) {
-                if (crates[i].intersects(boy)) {
-                    Rectangle crateCollusion = boy.intersection(crates[i]);
-                    if (boy.x > crates[i].x) {
-                        boy.x = boy.x - crateCollusion.width;
-                    }
-                    if (boy.x < crates[i].x) {
-                        boy.x = boy.x - crateCollusion.width;
-                    }
-                    if (boy.y > crates[i].y) {
-                        boy.y = boy.y - crateCollusion.width;
-                    }
-                    if (boy.y < crates[i].y) {
-                        boy.y = boy.y - crateCollusion.width;
+                    if (crates[i].intersects(boy)) {
+                        Rectangle crateCollusion = boy.intersection(crates[i]);
 
-                    }
-                }
-            }
+                        //LEFT X
+                        if (boy.x > crates[i].x) {
+                            if (crateCollusion.width > crateCollusion.height) {
+                                boy.y = boy.y - crateCollusion.height;
+                                
+                            }
+                            if (crateCollusion.width < crateCollusion.height) {
+                                boy.x = boy.x - crateCollusion.width;
 
-            for (int e = 0; e < blockcount; e++) {
-      
-                if (blocks[e].intersects(boy)) {
-                    Rectangle blocksCollusion = boy.intersection(blocks[e]);
-                    if (boy.x > blocks[e].x) {
-                        //boy.x = boy.x - blocksCollusion.width;
-                        if( boy.width > boy.height){
-                            //
-                            
+                            }
+
+                        }
+
+                        //RIGHT X
+                        if (boy.x < crates[i].x) {
+                            if (crateCollusion.width < crateCollusion.height) {
+                                boy.y = boy.y + crateCollusion.height;
+                            }
+                           // if (crateCollusion.width > crateCollusion.height) {
+                                boy.x = boy.x + crateCollusion.width;
+                           // }
+
+//--------------------------------------------------------------------------------------------------------
+
+                        //TOP Y
+                            if (boy.y > crates[i].y) {
+                                if (crateCollusion.width > crateCollusion.height)
+                                        boy.y = boy.y - crateCollusion.width;
+                            }
+                        //BOTTOM Y   
+                            if (boy.y < crates[i].y) {
+                                if( crateCollusion.width > crateCollusion.height)
+                                boy.x = boy.x + crateCollusion.width;
+
+                            }
                         }
                     }
-                    if (boy.x < blocks[e].x) {
-                        boy.x = boy.x - blocksCollusion.width;
-                    }
-                    if (boy.y > blocks[e].y) {
-                        boy.y = boy.y - blocksCollusion.width;
-                    }
-                    if (boy.y < blocks[e].y) {
-                        boy.y = boy.y + blocksCollusion.width;
 
+                    for (int e = 0; e < blockcount; e++) {
+
+                        if (blocks[e].intersects(boy)) {
+                            Rectangle blocksCollusion = boy.intersection(blocks[e]);
+                            if (boy.x > blocks[e].x) {
+                                boy.x = boy.x - blocksCollusion.width;
+                            }
+                            if (boy.x < blocks[e].x) {
+                                boy.x = boy.x - blocksCollusion.width;
+                            }
+                            if (boy.y > blocks[e].y) {
+                                boy.y = boy.y + blocksCollusion.width;
+                            }
+                            if (boy.y < blocks[e].y) {
+                                boy.y = boy.y - blocksCollusion.width;
+
+                            }
+                        }
                     }
+
+
+                    // GAME LOGIC ENDS HERE 
+
+                    // update the drawing (calls paintComponent)
+                    repaint();
+
+
+
+                    // SLOWS DOWN THE GAME BASED ON THE FRAMERATE ABOVE
+                    // USING SOME SIMPLE MATH
+                    deltaTime = System.currentTimeMillis() - startTime;
+                    try {
+                        if (deltaTime > desiredTime) {
+                            //took too much time, don't wait
+                            Thread.sleep(1);
+                        } else {
+                            // sleep to make up the extra time
+                            Thread.sleep(desiredTime - deltaTime);
+                        }
+                    } catch (Exception e) {
+                    };
                 }
             }
-
-                
-                // GAME LOGIC ENDS HERE 
-
-                // update the drawing (calls paintComponent)
-                repaint();
-
-
-
-                // SLOWS DOWN THE GAME BASED ON THE FRAMERATE ABOVE
-                // USING SOME SIMPLE MATH
-                deltaTime = System.currentTimeMillis() - startTime;
-                try {
-                    if (deltaTime > desiredTime) {
-                        //took too much time, don't wait
-                        Thread.sleep(1);
-                    } else {
-                        // sleep to make up the extra time
-                        Thread.sleep(desiredTime - deltaTime);
-                    }
-                } catch (Exception e) {
-                };
-            }
         }
-    }
 
-    /**
-     * @param args the command line arguments
-     */
+        /**
+         * @param args the command line arguments
+         */
+    
+
+    
+
+    
+
     public static void main(String[] args) {
         // creates a windows to show my game
         JFrame frame = new JFrame("My Game");

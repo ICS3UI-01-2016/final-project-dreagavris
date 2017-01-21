@@ -27,7 +27,8 @@ public class BomberBoy extends JComponent implements KeyListener {
     Color skincolor = new Color(244, 66, 66);
     Rectangle boy = new Rectangle(53, 469, 30, 35);
     Color blockscolor = new Color(196, 170, 137);
-    Rectangle bomb = new Rectangle(53, 600, 5, 10);
+    Color bombcolor = new Color(132, 8, 0);
+    Rectangle bomb = new Rectangle(0, 0, 5, 10);
     Rectangle[] blocks = new Rectangle[30];
     Color cratescolor = new Color(94, 46, 26);
     Rectangle[] crates = new Rectangle[55];
@@ -35,12 +36,14 @@ public class BomberBoy extends JComponent implements KeyListener {
     boolean downkey = false;
     boolean leftkey = false;
     boolean rightkey = false;
-    // Start the crate count at 0
+    boolean spacekey = false;
     int crateCount = 0;
+    int blockcount = 0;
 
     // drawing of the game happens in here
     // we use the Graphics object, g, to perform the drawing
     // NOTE: This is already double buffered!(helps with framerate/speed)
+
     @Override
     public void paintComponent(Graphics g) {
         // always clear the screen first!
@@ -65,7 +68,10 @@ public class BomberBoy extends JComponent implements KeyListener {
         for (int i = 0; i < crateCount; i++) {
             g.fillRect(crates[i].x, crates[i].y, crates[i].width, crates[i].height);
         }
+        if (spacekey) {
+            g.fillRect(bomb.x = boy.x + 2, bomb.y = boy.y + 2, bomb.width, bomb.height);
 
+        }
         // GAME DRAWING ENDS HERE
     }
 
@@ -77,15 +83,12 @@ public class BomberBoy extends JComponent implements KeyListener {
         long startTime;
         long deltaTime;
 
-        int blockcount = 0;
         for (int row = 1; row < 10; row = row + 2) {
             for (int col = 1; col < 12; col = col + 2) {
                 blocks[blockcount] = new Rectangle(col * 42 + 42, row * 42 + 42, 42, 42);
                 blockcount++;
             }
         }
-
-
 
         // Determine if the row is even or odd
         // This one increases by one only nad the a maxiumum of 12
@@ -111,6 +114,7 @@ public class BomberBoy extends JComponent implements KeyListener {
         }
         // Determine if the row is even or odd
         // This one increases by two because it skipping and has the a maxiumum of 12
+
         for (int row = 0; row < 11; row = row + 2) {
             for (int col = 1; col < 13; col = col + 1) {
                 // 
@@ -122,17 +126,11 @@ public class BomberBoy extends JComponent implements KeyListener {
                         break;
                     }
 
-
                 }
             }
             if (crateCount == 35) {
                 break;
             }
-
-
-
-
-
 
             // the main game loop section
             // game will end if you set done = false;
@@ -156,7 +154,10 @@ public class BomberBoy extends JComponent implements KeyListener {
                     boy.x = boy.x + 3;
                 }
 
-
+               // if (spacekey){
+                //   bomb.x = boy.x;
+                //    bomb.y = boy.y;
+               //}
                 for (int i = 0; i < crateCount; i++) {
                     if (crates[i].intersects(boy)) {
                         Rectangle crateCollusion = boy.intersection(crates[i]);
@@ -181,73 +182,99 @@ public class BomberBoy extends JComponent implements KeyListener {
                             if (crateCollusion.width < crateCollusion.height) {
                                 boy.x = boy.x + crateCollusion.width;
                             }
-                            //-------------------------------------------------------------------------------------------------------------------                         
-
-                            if (boy.y > crates[i].y) {
-                                if (crateCollusion.width < crateCollusion.height) {
-                                    boy.y = boy.y - crateCollusion.width;
-                                }
+                        }
+                        //FROM HERE ON EVERYTHING DESON'T WORK IN THE COLLUSION DECTECTION 
+                        //Top Side of the crate
+                        if (boy.y > crates[i].y) {
+                            if (crateCollusion.width > crateCollusion.height) {
+                                boy.y = boy.y + crateCollusion.height;
                             }
-
-                            if (boy.y < crates[i].y) {
-                                if (crateCollusion.width < crateCollusion.height) {
-                                    boy.x = boy.x + crateCollusion.width;
-                                }
-
+                            if (crateCollusion.width < crateCollusion.height) {
+                                boy.y = boy.y + crateCollusion.width;
+                            }
+                        }
+                        //Bottom Side of the Crate
+                        if (boy.y < crates[i].y) {
+                            if (crateCollusion.width > crateCollusion.height) {
+                                boy.y = boy.y - crateCollusion.height;
+                            }
+                            if (crateCollusion.width < crateCollusion.height) {
+                                boy.y = boy.y - crateCollusion.width;
                             }
                         }
                     }
-
-                    for (int e = 0; e < blockcount; e++) {
-
-                        if (blocks[e].intersects(boy)) {
-                            Rectangle blocksCollusion = boy.intersection(blocks[e]);
-                            if (boy.x > blocks[e].x) {
-                                boy.x = boy.x - blocksCollusion.width;
-                            }
-                            if (boy.x < blocks[e].x) {
-                                boy.x = boy.x - blocksCollusion.width;
-                            }
-                            if (boy.y > blocks[e].y) {
-                                boy.y = boy.y + blocksCollusion.width;
-                            }
-                            if (boy.y < blocks[e].y) {
-                                boy.y = boy.y - blocksCollusion.width;
-
-                            }
-                        }
-                    }
-
-
-                    // GAME LOGIC ENDS HERE 
-
-                    // update the drawing (calls paintComponent)
-                    repaint();
-
-
-
-                    // SLOWS DOWN THE GAME BASED ON THE FRAMERATE ABOVE
-                    // USING SOME SIMPLE MATH
-                    deltaTime = System.currentTimeMillis() - startTime;
-                    try {
-                        if (deltaTime > desiredTime) {
-                            //took too much time, don't wait
-                            Thread.sleep(1);
-                        } else {
-                            // sleep to make up the extra time
-                            Thread.sleep(desiredTime - deltaTime);
-                        }
-                    } catch (Exception e) {
-                    };
                 }
+
+                for (int e = 0; e < blockcount; e++) {
+                    if (blocks[e].intersects(boy)) {
+                        Rectangle blockCollusion = boy.intersection(blocks[e]);
+
+                        //Left Side of the block 
+                        if (boy.x < blocks[e].x) {
+                            if (blockCollusion.width > blockCollusion.height) {
+                                boy.x = boy.x - blockCollusion.height;
+
+                            }
+                            if (blockCollusion.width < blockCollusion.height) {
+                                boy.x = boy.x - blockCollusion.width;
+
+                            }
+
+                        }
+                        //Right Side of the block
+                        if (boy.x > blocks[e].x) {
+                            if (blockCollusion.width > blockCollusion.height) {
+                                boy.x = boy.x + blockCollusion.height;
+                            }
+                            if (blockCollusion.width < blockCollusion.height) {
+                                boy.x = boy.x + blockCollusion.width;
+                            }
+                        }
+
+                        //Top Side of the block
+                        if (boy.y > blocks[e].y) {
+                            if (blockCollusion.width > blockCollusion.height) {
+                                boy.y = boy.y + blockCollusion.height;
+                            }
+                            if (blockCollusion.width < blockCollusion.height) {
+                                boy.y = boy.y + blockCollusion.width;
+                            }
+                        }
+                        //Bottom Side of the block
+                        if (boy.y < blocks[e].y) {
+                            if (blockCollusion.width > blockCollusion.height) {
+                                boy.y = boy.y - blockCollusion.height;
+                            }
+                            if (blockCollusion.width < blockCollusion.height) {
+                                boy.y = boy.y - blockCollusion.width;
+                            }
+                        }
+                    }
+                }
+
+                // GAME LOGIC ENDS HERE 
+                // update the drawing (calls paintComponent)
+                repaint();
+                // SLOWS DOWN THE GAME BASED ON THE FRAMERATE ABOVE
+                // USING SOME SIMPLE MATH
+                deltaTime = System.currentTimeMillis() - startTime;
+                try {
+                    if (deltaTime > desiredTime) {
+                        //took too much time, don't wait
+                        Thread.sleep(1);
+                    } else {
+                        // sleep to make up the extra time
+                        Thread.sleep(desiredTime - deltaTime);
+                    }
+                } catch (Exception e) {
+                };
             }
-
-
             /**
              * @param args the command line arguments
              */
         }
     }
+
     public static void main(String[] args) {
         // creates a windows to show my game
         JFrame frame = new JFrame("My Game");
@@ -289,6 +316,9 @@ public class BomberBoy extends JComponent implements KeyListener {
         if (key == KeyEvent.VK_RIGHT) {
             rightkey = true;
         }
+        if (key == KeyEvent.VK_SPACE) {
+            spacekey = true;
+        }
     }
 
     @Override
@@ -306,7 +336,9 @@ public class BomberBoy extends JComponent implements KeyListener {
         if (key == KeyEvent.VK_RIGHT) {
             rightkey = false;
         }
-
+        if (key == KeyEvent.VK_SPACE) {
+            spacekey = true;
+        }
     }
 }
 //if(crates[1].intersects(boy)){}

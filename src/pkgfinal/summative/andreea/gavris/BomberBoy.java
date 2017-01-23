@@ -215,56 +215,7 @@ public class BomberBoy extends JComponent implements KeyListener {
                         }
                     }
                 }
-                //long timer = 60 * 2;
-                // if (spacekey == false){
-                // timer --; 
-                // if (timer == 0 ){
-                //    bomb.x = -10;
-                //    bomb.y = -10;
-
-
-                        //Left Side of the block 
-                        if (boy.x < blocks[e].x) {
-                            if (blockCollusion.width > blockCollusion.height) {
-                                boy.x = boy.x - blockCollusion.height;
-
-                            }
-                            if (blockCollusion.width < blockCollusion.height) {
-                                boy.x = boy.x - blockCollusion.width;
-
-                            }
-
-                        }
-                        //Right Side of the block
-                        if (boy.x > blocks[e].x) {
-                            if (blockCollusion.width > blockCollusion.height) {
-                                boy.x = boy.x + blockCollusion.height;
-                            }
-                            if (blockCollusion.width < blockCollusion.height) {
-                                boy.x = boy.x + blockCollusion.width;
-                            }
-                        }
-
-                        //Top Side of the block
-                        if (boy.y > blocks[e].y) {
-                            if (blockCollusion.width > blockCollusion.height) {
-                                boy.y = boy.y + blockCollusion.height;
-                            }
-                            if (blockCollusion.width < blockCollusion.height) {
-                                boy.y = boy.y + blockCollusion.width;
-                            }
-                        }
-                        //Bottom Side of the block
-                        if (boy.y < blocks[e].y) {
-                            if (blockCollusion.width > blockCollusion.height) {
-                                boy.y = boy.y - blockCollusion.height;
-                            }
-                            if (blockCollusion.width < blockCollusion.height) {
-                                boy.y = boy.y - blockCollusion.width;
-                            }
-                        }
-                    }
-                }
+               
                 // GAME LOGIC ENDS HERE 
                 // update the drawing (calls paintComponent)
                 repaint();
@@ -399,8 +350,9 @@ public class BomberBoy extends JComponent implements KeyListener {
          * @param args the command line arguments
          */
     }
-}
-}
+
+
+
     public static void main(String[] args) {
         // creates a windows to show my game
         JFrame frame = new JFrame("My Game");

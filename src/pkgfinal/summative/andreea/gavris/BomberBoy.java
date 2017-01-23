@@ -26,12 +26,17 @@ public class BomberBoy extends JComponent implements KeyListener {
     Color backgroundcolor = new Color(43, 23, 5);
     Color skincolor = new Color(244, 66, 66);
     Rectangle boy = new Rectangle(53, 469, 30, 35);
-    Color blockscolor = new Color(196, 170, 137);
     Color bombcolor = new Color(132, 8, 0);
-    Rectangle bomb = new Rectangle(0, 0, 5, 10);
+    Rectangle bomb = new Rectangle(-10, -10, 10, 20);
+    Color blockscolor = new Color(196, 170, 137);
     Rectangle[] blocks = new Rectangle[30];
     Color cratescolor = new Color(94, 46, 26);
     Rectangle[] crates = new Rectangle[55];
+    Rectangle middleExplosion = new Rectangle(0, 0, 42, 42);
+    Rectangle topExplosion = new Rectangle(0, 0, 42, 42);
+    Rectangle bottoExplosion = new Rectangle(0, 0, 42, 42);
+    Rectangle leftExplosion = new Rectangle(0, 0, 42, 42);
+    Rectangle rightExplosion = new Rectangle(0, 0, 42, 42);
     boolean upkey = false;
     boolean downkey = false;
     boolean leftkey = false;
@@ -39,11 +44,11 @@ public class BomberBoy extends JComponent implements KeyListener {
     boolean spacekey = false;
     int crateCount = 0;
     int blockcount = 0;
+    long timer = 0;
 
     // drawing of the game happens in here
     // we use the Graphics object, g, to perform the drawing
     // NOTE: This is already double buffered!(helps with framerate/speed)
-
     @Override
     public void paintComponent(Graphics g) {
         // always clear the screen first!
@@ -68,10 +73,10 @@ public class BomberBoy extends JComponent implements KeyListener {
         for (int i = 0; i < crateCount; i++) {
             g.fillRect(crates[i].x, crates[i].y, crates[i].width, crates[i].height);
         }
-        if (spacekey) {
-            g.fillRect(bomb.x = boy.x + 2, bomb.y = boy.y + 2, bomb.width, bomb.height);
+        g.setColor(bombcolor);
+        g.fillRect(bomb.x, bomb.y, bomb.width, bomb.height);
+        g.fillRect(middleExplosion.x, middleExplosion.y, middleExplosion.width, middleExplosion.height);
 
-        }
         // GAME DRAWING ENDS HERE
     }
 
@@ -153,11 +158,17 @@ public class BomberBoy extends JComponent implements KeyListener {
                 if (rightkey) {
                     boy.x = boy.x + 3;
                 }
+                if (spacekey) {
+                    bomb.x = boy.x + 10;
+                    bomb.y = boy.y + 8;
+                    timer = 60 * 2;
+                }
+                timer--;
+                if (timer == 0) {
+                
 
-               // if (spacekey){
-                //   bomb.x = boy.x;
-                //    bomb.y = boy.y;
-               //}
+                
+                }
                 for (int i = 0; i < crateCount; i++) {
                     if (crates[i].intersects(boy)) {
                         Rectangle crateCollusion = boy.intersection(crates[i]);
@@ -183,7 +194,7 @@ public class BomberBoy extends JComponent implements KeyListener {
                                 boy.x = boy.x + crateCollusion.width;
                             }
                         }
-                        //FROM HERE ON EVERYTHING DESON'T WORK IN THE COLLUSION DECTECTION 
+
                         //Top Side of the crate
                         if (boy.y > crates[i].y) {
                             if (crateCollusion.width > crateCollusion.height) {
@@ -251,7 +262,6 @@ public class BomberBoy extends JComponent implements KeyListener {
                         }
                     }
                 }
-
                 // GAME LOGIC ENDS HERE 
                 // update the drawing (calls paintComponent)
                 repaint();
@@ -337,9 +347,7 @@ public class BomberBoy extends JComponent implements KeyListener {
             rightkey = false;
         }
         if (key == KeyEvent.VK_SPACE) {
-            spacekey = true;
+            spacekey = false;
         }
     }
 }
-//if(crates[1].intersects(boy)){}
-

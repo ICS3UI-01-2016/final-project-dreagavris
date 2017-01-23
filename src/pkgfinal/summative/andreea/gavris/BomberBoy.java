@@ -27,16 +27,16 @@ public class BomberBoy extends JComponent implements KeyListener {
     Color skincolor = new Color(244, 66, 66);
     Rectangle boy = new Rectangle(53, 469, 30, 35);
     Color bombcolor = new Color(132, 8, 0);
-    Rectangle bomb = new Rectangle(-10, -10, 10, 20);
+    Rectangle bomb = new Rectangle(-20, -20, 15, 20);
     Color blockscolor = new Color(196, 170, 137);
     Rectangle[] blocks = new Rectangle[30];
     Color cratescolor = new Color(94, 46, 26);
     Rectangle[] crates = new Rectangle[55];
-    Rectangle middleExplosion = new Rectangle(0, 0, 42, 42);
-    Rectangle topExplosion = new Rectangle(0, 0, 42, 42);
-    Rectangle bottoExplosion = new Rectangle(0, 0, 42, 42);
-    Rectangle leftExplosion = new Rectangle(0, 0, 42, 42);
-    Rectangle rightExplosion = new Rectangle(0, 0, 42, 42);
+    Rectangle middleExplosion = new Rectangle(-1, -1, 42, 42);
+    Rectangle topExplosion = new Rectangle(-1, -1, 42, 42);
+    Rectangle bottoExplosion = new Rectangle(-1, -1, 42, 42);
+    Rectangle leftExplosion = new Rectangle(-1, -1, 42, 42);
+    Rectangle rightExplosion = new Rectangle(-1, -1, 42, 42);
     boolean upkey = false;
     boolean downkey = false;
     boolean leftkey = false;
@@ -75,7 +75,7 @@ public class BomberBoy extends JComponent implements KeyListener {
         }
         g.setColor(bombcolor);
         g.fillRect(bomb.x, bomb.y, bomb.width, bomb.height);
-        g.fillRect(middleExplosion.x, middleExplosion.y, middleExplosion.width, middleExplosion.height);
+
 
         // GAME DRAWING ENDS HERE
     }
@@ -85,7 +85,7 @@ public class BomberBoy extends JComponent implements KeyListener {
     public void run() {
         // Used to keep track of time used to draw and update the game
         // This is used to limit the framerate later on
-        long startTime;
+        long startTime = 0;
         long deltaTime;
 
         for (int row = 1; row < 10; row = row + 2) {
@@ -159,16 +159,11 @@ public class BomberBoy extends JComponent implements KeyListener {
                     boy.x = boy.x + 3;
                 }
                 if (spacekey) {
-                    bomb.x = boy.x + 10;
+                    bomb.x = boy.x + 8;
                     bomb.y = boy.y + 8;
                     timer = 60 * 2;
                 }
-                timer--;
-                if (timer == 0) {
-                
 
-                
-                }
                 for (int i = 0; i < crateCount; i++) {
                     if (crates[i].intersects(boy)) {
                         Rectangle crateCollusion = boy.intersection(crates[i]);
@@ -215,7 +210,56 @@ public class BomberBoy extends JComponent implements KeyListener {
                         }
                     }
                 }
-               
+                for (int e = 0; e < blockcount; e++) {
+                    if (blocks[e].intersects(boy)) {
+                        Rectangle blockCollusion = boy.intersection(blocks[e]);
+
+                        //Left Side of the block 
+                        if (boy.x < blocks[e].x) {
+                            if (blockCollusion.width > blockCollusion.height) {
+                                boy.x = boy.x - blockCollusion.height;
+
+                            }
+                            if (blockCollusion.width < blockCollusion.height) {
+                                boy.x = boy.x - blockCollusion.width;
+
+                            }
+
+                        }
+                        //Right Side of the block
+                        if (boy.x > blocks[e].x) {
+                            if (blockCollusion.width > blockCollusion.height) {
+                                boy.x = boy.x + blockCollusion.height;
+                            }
+                            if (blockCollusion.width < blockCollusion.height) {
+                                boy.x = boy.x + blockCollusion.width;
+                            }
+                        }
+
+                        //Top Side of the block
+                        if (boy.y > blocks[e].y) {
+                            if (blockCollusion.width > blockCollusion.height) {
+                                boy.y = boy.y + blockCollusion.height;
+                            }
+                            if (blockCollusion.width < blockCollusion.height) {
+                                boy.y = boy.y + blockCollusion.width;
+                            }
+                        }
+                        //Bottom Side of the block
+                        if (boy.y < blocks[e].y) {
+                            if (blockCollusion.width > blockCollusion.height) {
+                                boy.y = boy.y - blockCollusion.height;
+                            }
+                            if (blockCollusion.width < blockCollusion.height) {
+                                boy.y = boy.y - blockCollusion.width;
+                            }
+                        }
+                    }
+                }
+                
+                timer--;
+                if (timer == 0) {
+                }
                 // GAME LOGIC ENDS HERE 
                 // update the drawing (calls paintComponent)
                 repaint();
@@ -231,101 +275,6 @@ public class BomberBoy extends JComponent implements KeyListener {
                         Thread.sleep(desiredTime - deltaTime);
                     }
                 } catch (Exception e) {
-                };
-            }
-
-
-            for (int i = 0; i < crateCount; i++) {
-                if (crates[i].intersects(boy)) {
-                    Rectangle crateCollusion = boy.intersection(crates[i]);
-
-                    //Left Side of the crate 
-                    if (boy.x < crates[i].x) {
-                        if (crateCollusion.width > crateCollusion.height) {
-                            boy.x = boy.x - crateCollusion.height;
-
-                        }
-                        if (crateCollusion.width < crateCollusion.height) {
-                            boy.x = boy.x - crateCollusion.width;
-
-                        }
-
-                    }
-                    //Right Side of the crate
-                    if (boy.x > crates[i].x) {
-                        if (crateCollusion.width > crateCollusion.height) {
-                            boy.x = boy.x + crateCollusion.height;
-                        }
-                        if (crateCollusion.width < crateCollusion.height) {
-                            boy.x = boy.x + crateCollusion.width;
-                        }
-                    }
-                    //FROM HERE ON EVERYTHING DESON'T WORK IN THE COLLUSION DECTECTION 
-                    //Top Side of the crate
-                    if (boy.y > crates[i].y) {
-                        if (crateCollusion.width > crateCollusion.height) {
-                            boy.y = boy.y + crateCollusion.height;
-                        }
-                        if (crateCollusion.width < crateCollusion.height) {
-                            boy.y = boy.y + crateCollusion.width;
-                        }
-                    }
-                    //Bottom Side of the Crate
-                    if (boy.y < crates[i].y) {
-                        if (crateCollusion.width > crateCollusion.height) {
-                            boy.y = boy.y - crateCollusion.height;
-                        }
-                        if (crateCollusion.width < crateCollusion.height) {
-                            boy.y = boy.y - crateCollusion.width;
-                        }
-                    }
-                }
-            }
-
-            for (int e = 0; e < blockcount; e++) {
-                if (blocks[e].intersects(boy)) {
-                    Rectangle blockCollusion = boy.intersection(blocks[e]);
-
-                    //Left Side of the block 
-                    if (boy.x < blocks[e].x) {
-                        if (blockCollusion.width > blockCollusion.height) {
-                            boy.x = boy.x - blockCollusion.height;
-
-                        }
-                        if (blockCollusion.width < blockCollusion.height) {
-                            boy.x = boy.x - blockCollusion.width;
-
-                        }
-
-                    }
-                    //Right Side of the block
-                    if (boy.x > blocks[e].x) {
-                        if (blockCollusion.width > blockCollusion.height) {
-                            boy.x = boy.x + blockCollusion.height;
-                        }
-                        if (blockCollusion.width < blockCollusion.height) {
-                            boy.x = boy.x + blockCollusion.width;
-                        }
-                    }
-
-                    //Top Side of the block
-                    if (boy.y > blocks[e].y) {
-                        if (blockCollusion.width > blockCollusion.height) {
-                            boy.y = boy.y + blockCollusion.height;
-                        }
-                        if (blockCollusion.width < blockCollusion.height) {
-                            boy.y = boy.y + blockCollusion.width;
-                        }
-                    }
-                    //Bottom Side of the block
-                    if (boy.y < blocks[e].y) {
-                        if (blockCollusion.width > blockCollusion.height) {
-                            boy.y = boy.y - blockCollusion.height;
-                        }
-                        if (blockCollusion.width < blockCollusion.height) {
-                            boy.y = boy.y - blockCollusion.width;
-                        }
-                    }
                 }
             }
 
@@ -351,8 +300,6 @@ public class BomberBoy extends JComponent implements KeyListener {
          */
     }
 
-
-
     public static void main(String[] args) {
         // creates a windows to show my game
         JFrame frame = new JFrame("My Game");
@@ -376,11 +323,11 @@ public class BomberBoy extends JComponent implements KeyListener {
     }
 
     @Override
-        public void keyTyped(KeyEvent e) {
+    public void keyTyped(KeyEvent e) {
     }
 
     @Override
-        public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         if (key == KeyEvent.VK_UP) {
             upkey = true;
@@ -400,7 +347,7 @@ public class BomberBoy extends JComponent implements KeyListener {
     }
 
     @Override
-        public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         if (key == KeyEvent.VK_UP) {
             upkey = false;

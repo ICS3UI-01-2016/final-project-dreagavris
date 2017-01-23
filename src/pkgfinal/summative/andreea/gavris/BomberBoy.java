@@ -257,7 +257,7 @@ public class BomberBoy extends JComponent implements KeyListener {
                     }
                 }
                 
-                timer--;
+                    timer--;
                 if (timer == 0) {
                 }
                 // GAME LOGIC ENDS HERE 

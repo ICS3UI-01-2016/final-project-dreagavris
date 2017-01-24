@@ -31,8 +31,8 @@ public class BomberBoy extends JComponent implements KeyListener {
     Color blockscolor = new Color(196, 170, 137);
     Rectangle[] blocks = new Rectangle[30];
     Color topBordercolor = new Color(196, 170, 137);
-    Rectangle[]topBorder = new Rectangle[15];
-   
+    Rectangle[] topBorder = new Rectangle[15];
+
     Color cratescolor = new Color(94, 46, 26);
     Rectangle[] crates = new Rectangle[55];
     Color middlecolor = new Color(244, 66, 66);
@@ -96,7 +96,7 @@ public class BomberBoy extends JComponent implements KeyListener {
             g.fillRect(blocks[i].x, blocks[i].y, blocks[i].width, blocks[i].height);
         }
         for (int b = 0; b < 15; b++) {
-            g.fillRect(topBorder[b].x, topBorder[b].y, topBorder[b].width, topBorder[b].height); 
+            g.fillRect(topBorder[b].x, topBorder[b].y, topBorder[b].width, topBorder[b].height);
         }
 
         // GAME DRAWING ENDS HERE
@@ -109,11 +109,11 @@ public class BomberBoy extends JComponent implements KeyListener {
         // This is used to limit the framerate later on
         long startTime = 0;
         long deltaTime;
-        for( int toprow = 0; toprow < 15; toprow = toprow +1){
-        topBorder[topBordercount] = new Rectangle (toprow * 42 + 42, 42);
-        topBordercount++;
+        for (int toprow = 0; toprow < 15; toprow = toprow + 1) {
+            topBorder[topBordercount] = new Rectangle(toprow * 42 + 42, 42);
+            topBordercount++;
         }
-        
+
         for (int row = 1; row < 10; row = row + 2) {
             for (int col = 1; col < 12; col = col + 2) {
                 blocks[blockcount] = new Rectangle(col * 42 + 42, row * 42 + 42, 42, 42);
@@ -343,31 +343,31 @@ public class BomberBoy extends JComponent implements KeyListener {
                     bomb.y = 600;
 
                 }
-               if ( middleExplosion.intersects(boy)) {
-                boy.x = 53;
-                boy.y = 440;
-               lifecount = lifecount -1;
-            }
-               if ( topExplosion.intersects(boy)) {
-                boy.x = 53;
-                boy.y = 440;
-               lifecount = lifecount -1;
-            }
-               if ( bottomExplosion.intersects(boy)) {
-                boy.x = 53;
-                boy.y = 440;
-               lifecount = lifecount -1;
-            }
-               if ( leftExplosion.intersects(boy)) {
-                boy.x = 53;
-                boy.y = 440;
-               lifecount = lifecount -1;
-            }
-               if ( rightExplosion.intersects(boy)) {
-                boy.x = 53;
-                boy.y = 440;
-               lifecount = lifecount -1;
-            }
+                if (middleExplosion.intersects(boy)) {
+                    boy.x = 53;
+                    boy.y = 440;
+                    lifecount = lifecount - 1;
+                }
+                if (topExplosion.intersects(boy)) {
+                    boy.x = 53;
+                    boy.y = 440;
+                    lifecount = lifecount - 1;
+                }
+                if (bottomExplosion.intersects(boy)) {
+                    boy.x = 53;
+                    boy.y = 440;
+                    lifecount = lifecount - 1;
+                }
+                if (leftExplosion.intersects(boy)) {
+                    boy.x = 53;
+                    boy.y = 440;
+                    lifecount = lifecount - 1;
+                }
+                if (rightExplosion.intersects(boy)) {
+                    boy.x = 53;
+                    boy.y = 440;
+                    lifecount = lifecount - 1;
+                }
 
                 // GAME LOGIC ENDS HERE 
                 // update the drawing (calls paintComponent)
@@ -386,8 +386,7 @@ public class BomberBoy extends JComponent implements KeyListener {
                 } catch (Exception e) {
                 }
             }
-            
-            
+
             // GAME LOGIC ENDS HERE 
             // update the drawing (calls paintComponent)
             repaint();
@@ -411,7 +410,6 @@ public class BomberBoy extends JComponent implements KeyListener {
     /**
      * @param args the command line arguments
      */
-
     public static void main(String[] args) {
         // creates a windows to show my game
         JFrame frame = new JFrame("My Game");
